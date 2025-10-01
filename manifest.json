@@ -1,0 +1,24 @@
+{
+    "name": "Nosso Amor ❤️",
+    "short_name": "NossoAmor",
+    "description": "Um cantinho especial dedicado ao nosso amor eterno",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ff6b9d",
+    "theme_color": "#ff6b9d",
+    "orientation": "portrait-primary",
+    "categories": ["lifestyle", "entertainment"],
+    "lang": "pt-BR",
+    "icons": [
+        {
+            "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23ff6b9d;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23ff1493;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='192' height='192' fill='url(%23grad)'/%3E%3Cpath fill='white' d='M96 160c-4 0-8-2-10-5-20-25-50-55-50-80 0-25 20-45 45-45 12 0 23 5 30 13 7-8 18-13 30-13 25 0 45 20 45 45 0 25-30 55-50 80-2 3-6 5-10 5z'/%3E%3C/svg%3E",
+            "sizes": "192x192",
+            "type": "image/svg+xml"
+        },
+        {
+            "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23ff6b9d;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23ff1493;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' fill='url(%23grad)'/%3E%3Cpath fill='white' d='M256 448c-10 0-20-5-27-13-53-66-133-146-133-213 0-66 53-120 120-120 32 0 61 13 80 35 19-22 48-35 80-35 67 0 120 54 120 120 0 67-80 147-133 213-7 8-17 13-27 13z'/%3E%3C/svg%3E",
+            "sizes": "512x512",
+            "type": "image/svg+xml"
+        }
+    ]
+}
