@@ -211,7 +211,7 @@ O site é totalmente responsivo:
 ## 📄 Estrutura de Arquivos
 
 ```
-splitwise/
+mari/
 ├── index.html          # Página principal
 ├── styles.css          # Estilos e animações
 ├── script.js           # Lógica e funcionalidades
