@@ -7,13 +7,21 @@ class NossoAmor {
         this.selectedMusic = null;
         this.audioPlayers = {
             iris: new Audio('msc/iris.mp3'),
-            photograph: new Audio('msc/photograph.mp3')
+            photograph: new Audio('msc/photograph.mp3'),
+            TFT: new Audio('msc/TFT.mp3'),
+            mari: new Audio('msc/mari.mp3')
         };
         
         // Baserow API
         this.baserowAPI = {
-            endpoint: 'https://api.baserow.io/api/database/rows/table/689174/',
-            token: 'AWZiAGvB73hrext58UZvVdBR1caahROH'
+            messages: {
+                endpoint: 'https://api.baserow.io/api/database/rows/table/689174/',
+                token: 'AWZiAGvB73hrext58UZvVdBR1caahROH'
+            },
+            complaints: {
+                endpoint: 'https://api.baserow.io/api/database/rows/table/691159/',
+                token: 'AWZiAGvB73hrext58UZvVdBR1caahROH'
+            }
         };
         
         // Frases de amor
@@ -42,6 +50,9 @@ class NossoAmor {
         // Cores para post-its
         this.postItColors = ['#ffd1dc', '#fffacd', '#e0ffe0', '#e0f0ff', '#ffe0f0', '#fff0e0'];
         
+        // Cores para reclamações (tons mais escuros/sérios)
+        this.complaintColors = ['#ffcccb', '#ffe4b5', '#ffdab9', '#ffb6c1', '#ffc0cb', '#ffe4e1'];
+        
         // Easter egg
         this.typedText = '';
         
@@ -56,6 +67,7 @@ class NossoAmor {
         this.setupCountdown();
         this.setupGallery();
         this.setupMural();
+        this.setupComplaints();
         this.setupMusicPlayers();
         this.setupClickHearts();
         this.startLovePhrases();
@@ -256,9 +268,9 @@ class NossoAmor {
     
     async loadMessages() {
         try {
-            const response = await fetch(`${this.baserowAPI.endpoint}?user_field_names=true`, {
+            const response = await fetch(`${this.baserowAPI.messages.endpoint}?user_field_names=true`, {
                 headers: {
-                    'Authorization': `Token ${this.baserowAPI.token}`
+                    'Authorization': `Token ${this.baserowAPI.messages.token}`
                 }
             });
             
@@ -332,10 +344,10 @@ class NossoAmor {
                 year: 'numeric'
             });
             
-            const response = await fetch(`${this.baserowAPI.endpoint}?user_field_names=true`, {
+            const response = await fetch(`${this.baserowAPI.messages.endpoint}?user_field_names=true`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${this.baserowAPI.token}`,
+                    'Authorization': `Token ${this.baserowAPI.messages.token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -360,10 +372,10 @@ class NossoAmor {
         if (!confirm('Deseja realmente excluir este recado?')) return;
         
         try {
-            const response = await fetch(`${this.baserowAPI.endpoint}${id}/`, {
+            const response = await fetch(`${this.baserowAPI.messages.endpoint}${id}/`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Token ${this.baserowAPI.token}`
+                    'Authorization': `Token ${this.baserowAPI.messages.token}`
                 }
             });
             
@@ -399,6 +411,217 @@ class NossoAmor {
         document.getElementById('modal-author').textContent = msg.Author || 'Anônimo';
         document.getElementById('modal-message').textContent = msg.Messages;
         document.getElementById('modal-date').textContent = formattedDate;
+        
+        modal.classList.add('active');
+        
+        const closeBtn = modal.querySelector('.modal-close');
+        closeBtn.onclick = () => modal.classList.remove('active');
+        
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+    }
+    
+    // ===== CANTO DAS RECLAMAÇÕES =====
+    setupComplaints() {
+        const addBtn = document.getElementById('add-complaint-btn');
+        const authorInput = document.getElementById('complaint-author-input');
+        const aboutInput = document.getElementById('complaint-about-input');
+        const severityInput = document.getElementById('complaint-severity-input');
+        const textInput = document.getElementById('complaint-text-input');
+        
+        // Carregar reclamações
+        this.loadComplaints();
+        
+        // Adicionar reclamação
+        addBtn.addEventListener('click', () => {
+            const author = authorInput.value.trim();
+            const about = aboutInput.value;
+            const severity = severityInput.value;
+            const text = textInput.value.trim();
+            
+            if (author && about && severity && text) {
+                this.addComplaint(author, about, severity, text);
+                authorInput.value = '';
+                aboutInput.value = '';
+                severityInput.value = '';
+                textInput.value = '';
+                
+                // Salvar nome do autor
+                localStorage.setItem('complaintAuthorName', author);
+            } else {
+                alert('Por favor, preencha todos os campos!');
+            }
+        });
+        
+        // Restaurar nome do autor
+        const savedAuthor = localStorage.getItem('complaintAuthorName');
+        if (savedAuthor) {
+            authorInput.value = savedAuthor;
+        }
+    }
+    
+    async loadComplaints() {
+        try {
+            const response = await fetch(`${this.baserowAPI.complaints.endpoint}?user_field_names=true`, {
+                headers: {
+                    'Authorization': `Token ${this.baserowAPI.complaints.token}`
+                }
+            });
+            
+            if (!response.ok) throw new Error('Erro ao carregar reclamações');
+            
+            const data = await response.json();
+            this.displayComplaints(data.results || []);
+        } catch (error) {
+            console.error('Erro:', error);
+            document.getElementById('complaints-container').innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #999;">
+                    <i class="fas fa-exclamation-circle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p>Não foi possível carregar as reclamações. Tente novamente mais tarde.</p>
+                </div>
+            `;
+        }
+    }
+    
+    displayComplaints(complaints) {
+        const container = document.getElementById('complaints-container');
+        container.innerHTML = '';
+        
+        complaints.forEach((complaint, index) => {
+            const card = document.createElement('div');
+            card.className = 'complaint-card';
+            card.style.setProperty('--complaint-color', this.complaintColors[index % this.complaintColors.length]);
+            card.style.animationDelay = `${index * 0.1}s`;
+            
+            // Try to get formatted date from database, fallback to Created_at
+            let formattedDate;
+            if (complaint.Formatted_Date) {
+                formattedDate = complaint.Formatted_Date;
+            } else if (complaint.Created_at) {
+                const date = new Date(complaint.Created_at);
+                formattedDate = date.toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric'
+                });
+            } else {
+                formattedDate = 'Data desconhecida';
+            }
+            
+            // Truncar texto se for muito longo
+            const maxLength = 100;
+            const truncatedText = complaint.Complaint.length > maxLength 
+                ? complaint.Complaint.substring(0, maxLength) + '...' 
+                : complaint.Complaint;
+            
+            card.innerHTML = `
+                <div class="complaint-header">
+                    <span class="complaint-author">${complaint.Author || 'Anônimo'}</span>
+                    <span class="complaint-severity">${complaint.Severity || '😤'}</span>
+                </div>
+                <div class="complaint-about">Reclamação sobre: <strong>${complaint.About_Who || 'Desconhecido'}</strong></div>
+                <div class="complaint-text">${truncatedText}</div>
+                <div class="complaint-date">${formattedDate}</div>
+                <button class="complaint-delete" onclick="app.deleteComplaint(${complaint.id})">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            // Abrir modal ao clicar
+            card.addEventListener('click', (e) => {
+                if (!e.target.closest('.complaint-delete')) {
+                    this.showComplaintModal(complaint);
+                }
+            });
+            
+            container.appendChild(card);
+        });
+    }
+    
+    async addComplaint(author, aboutWho, severity, complaint) {
+        try {
+            // Create formatted date
+            const now = new Date();
+            const formattedDate = now.toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+            
+            const response = await fetch(`${this.baserowAPI.complaints.endpoint}?user_field_names=true`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Token ${this.baserowAPI.complaints.token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    Author: author,
+                    About_Who: aboutWho,
+                    Severity: severity,
+                    Complaint: complaint,
+                    Formatted_Date: formattedDate
+                })
+            });
+            
+            if (response.ok) {
+                this.loadComplaints();
+            } else {
+                alert('Erro ao adicionar reclamação. Tente novamente.');
+            }
+        } catch (error) {
+            console.error('Erro:', error);
+            alert('Erro ao adicionar reclamação. Verifique sua conexão.');
+        }
+    }
+    
+    async deleteComplaint(id) {
+        if (!confirm('Deseja realmente excluir esta reclamação?')) return;
+        
+        try {
+            const response = await fetch(`${this.baserowAPI.complaints.endpoint}${id}/`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Token ${this.baserowAPI.complaints.token}`
+                }
+            });
+            
+            if (response.ok) {
+                this.loadComplaints();
+            } else {
+                alert('Erro ao excluir reclamação.');
+            }
+        } catch (error) {
+            console.error('Erro:', error);
+            alert('Erro ao excluir reclamação.');
+        }
+    }
+    
+    showComplaintModal(complaint) {
+        const modal = document.getElementById('complaint-modal');
+        
+        // Try to get formatted date from database, fallback to Created_at
+        let formattedDate;
+        if (complaint.Formatted_Date) {
+            formattedDate = complaint.Formatted_Date;
+        } else if (complaint.Created_at) {
+            const date = new Date(complaint.Created_at);
+            formattedDate = date.toLocaleDateString('pt-BR', { 
+                day: '2-digit', 
+                month: 'long', 
+                year: 'numeric' 
+            });
+        } else {
+            formattedDate = 'Data desconhecida';
+        }
+        
+        document.getElementById('complaint-modal-author').textContent = complaint.Author || 'Anônimo';
+        document.getElementById('complaint-modal-severity').textContent = complaint.Severity || '😤';
+        document.getElementById('complaint-modal-about-who').textContent = complaint.About_Who || 'Desconhecido';
+        document.getElementById('complaint-modal-text').textContent = complaint.Complaint;
+        document.getElementById('complaint-modal-date').textContent = formattedDate;
         
         modal.classList.add('active');
         
@@ -583,5 +806,6 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         document.getElementById('lightbox')?.classList.remove('active');
         document.getElementById('message-modal')?.classList.remove('active');
+        document.getElementById('complaint-modal')?.classList.remove('active');
     }
 });

@@ -35,6 +35,11 @@
                     <button class="music-btn" data-music="photograph">
                         <i class="fas fa-music"></i> Photograph
                     </button>
+                    <button class="music-btn" data-music="TFT">
+                        <i class="fas fa-music"></i> TFT
+                    </button>
+                    <button class="music-btn" data-music="mari">
+                        <i class="fas fa-music"></i> Every Breath You Take
                 </div>
             </div>
             <button class="enter-btn" id="enter-btn">
@@ -62,6 +67,9 @@
                 </button>
                 <button class="tab-btn" data-tab="mural">
                     <i class="fas fa-sticky-note"></i> Mural de Recados
+                </button>
+                <button class="tab-btn" data-tab="reclamacoes">
+                    <i class="fas fa-comment-dots"></i> Canto das Reclamações
                 </button>
                 <button class="tab-btn" data-tab="musica">
                     <i class="fas fa-music"></i> Nossa Música
@@ -166,6 +174,35 @@
                 </div>
             </section>
 
+            <!-- Canto das Reclamações -->
+            <section class="tab-content" data-tab="reclamacoes">
+                <div class="section-header">
+                    <h2><i class="fas fa-comment-dots"></i> Canto das Reclamações</h2>
+                    <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;">O que um não gostou que o outro fez? Reclama aqui! 😤</p>
+                </div>
+                <div class="complaint-form">
+                    <input type="text" id="complaint-author-input" placeholder="Seu nome" maxlength="50">
+                    <select id="complaint-about-input" class="complaint-select">
+                        <option value="">Reclamação sobre quem?</option>
+                        <option value="Mari">Mari</option>
+                        <option value="Xandy">Xandy</option>
+                    </select>
+                    <select id="complaint-severity-input" class="complaint-select">
+                        <option value="">Nível da reclamação</option>
+                        <option value="😤 Chateado">😤 Chateado</option>
+                        <option value="😠 Bravo">😠 Bravo</option>
+                        <option value="😡 Muito Bravo">😡 Muito Bravo</option>
+                    </select>
+                    <textarea id="complaint-text-input" placeholder="Descreva sua reclamação..." maxlength="500"></textarea>
+                    <button class="add-btn complaint-btn" id="add-complaint-btn">
+                        <i class="fas fa-plus"></i> Adicionar Reclamação
+                    </button>
+                </div>
+                <div class="complaints-container" id="complaints-container">
+                    <!-- Reclamações serão carregadas aqui -->
+                </div>
+            </section>
+
             <!-- Nossa Música -->
             <section class="tab-content" data-tab="musica">
                 <div class="section-header">
@@ -208,6 +245,42 @@
                             <input type="range" class="volume-slider" data-player="photograph" min="0" max="100" value="30">
                         </div>
                     </div>
+                    <div class="player">
+                        <h3>The First Time</h3>
+                        <div class="player-controls">
+                            <button class="control-btn play-btn" data-player="TFT">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button class="control-btn pause-btn" data-player="TFT">
+                                <i class="fas fa-pause"></i>
+                            </button>
+                            <button class="control-btn stop-btn" data-player="TFT">
+                                <i class="fas fa-stop"></i>
+                            </button>
+                        </div>
+                        <div class="volume-control">
+                            <i class="fas fa-volume-up"></i>
+                            <input type="range" class="volume-slider" data-player="TFT" min="0" max="100" value="30">
+                        </div>
+                    </div>
+                       <div class="player">
+                        <h3>Every Breath You Take</h3>
+                        <div class="player-controls">
+                            <button class="control-btn play-btn" data-player="mari">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button class="control-btn pause-btn" data-player="mari">
+                                <i class="fas fa-pause"></i>
+                            </button>
+                            <button class="control-btn stop-btn" data-player="mari">
+                                <i class="fas fa-stop"></i>
+                            </button>
+                        </div>
+                        <div class="volume-control">
+                            <i class="fas fa-volume-up"></i>
+                            <input type="range" class="volume-slider" data-player="mari" min="0" max="100" value="30">
+                        </div>
+                    </div>
                 </div>
             </section>
         </main>
@@ -240,6 +313,22 @@
             <h3 id="modal-author"></h3>
             <p id="modal-message"></p>
             <small id="modal-date"></small>
+        </div>
+    </div>
+
+    <!-- Complaint Modal -->
+    <div class="modal" id="complaint-modal">
+        <div class="modal-content complaint-modal-content">
+            <button class="modal-close">&times;</button>
+            <div class="complaint-modal-header">
+                <h3 id="complaint-modal-author"></h3>
+                <span id="complaint-modal-severity" class="modal-severity"></span>
+            </div>
+            <div class="complaint-modal-about">
+                Reclamação sobre: <strong id="complaint-modal-about-who"></strong>
+            </div>
+            <p id="complaint-modal-text"></p>
+            <small id="complaint-modal-date"></small>
         </div>
     </div>
 
