@@ -44,9 +44,8 @@ class NossoAmor {
             { src: 'img/3.jpeg', caption: 'Amo' },
             { src: 'img/4.jpeg', caption: 'Muito' },
             { src: 'img/5.jpeg', caption: 'Meu Amor' },
-            { src: 'img/6.jpeg', caption: '03/10/2025 🥰' },
-
-        ];
+            { src: 'img/6.jpeg', caption: 'Amo Voce' },
+       ];
         
         // Cores para post-its
         this.postItColors = ['#ffd1dc', '#fffacd', '#e0ffe0', '#e0f0ff', '#ffe0f0', '#fff0e0'];
@@ -87,7 +86,6 @@ class NossoAmor {
                 musicBtns.forEach(b => b.classList.remove('selected'));
                 btn.classList.add('selected');
                 this.selectedMusic = btn.dataset.music;
-                localStorage.setItem('selectedMusic', this.selectedMusic);
             });
         });
         
@@ -121,18 +119,8 @@ class NossoAmor {
                 // Adicionar active ao selecionado
                 btn.classList.add('active');
                 document.querySelector(`.tab-content[data-tab="${tabName}"]`).classList.add('active');
-                
-                // Salvar última aba
-                localStorage.setItem('lastTab', tabName);
             });
         });
-        
-        // Restaurar última aba
-        const lastTab = localStorage.getItem('lastTab');
-        if (lastTab) {
-            const btn = document.querySelector(`.tab-btn[data-tab="${lastTab}"]`);
-            if (btn) btn.click();
-        }
     }
     
     // ===== CONTADOR DE TEMPO =====
@@ -251,19 +239,10 @@ class NossoAmor {
                 this.addMessage(author, message);
                 authorInput.value = '';
                 messageInput.value = '';
-                
-                // Salvar nome do autor
-                localStorage.setItem('authorName', author);
             } else {
                 alert('Por favor, preencha todos os campos!');
             }
         });
-        
-        // Restaurar nome do autor
-        const savedAuthor = localStorage.getItem('authorName');
-        if (savedAuthor) {
-            authorInput.value = savedAuthor;
-        }
     }
     
     async loadMessages() {
@@ -448,19 +427,10 @@ class NossoAmor {
                 aboutInput.value = '';
                 severityInput.value = '';
                 textInput.value = '';
-                
-                // Salvar nome do autor
-                localStorage.setItem('complaintAuthorName', author);
             } else {
                 alert('Por favor, preencha todos os campos!');
             }
         });
-        
-        // Restaurar nome do autor
-        const savedAuthor = localStorage.getItem('complaintAuthorName');
-        if (savedAuthor) {
-            authorInput.value = savedAuthor;
-        }
     }
     
     async loadComplaints() {
@@ -778,16 +748,6 @@ class NossoAmor {
         }
     }
     
-    // ===== LOCAL STORAGE =====
-    loadFromLocalStorage() {
-        this.selectedMusic = localStorage.getItem('selectedMusic');
-    }
-    
-    saveToLocalStorage() {
-        if (this.selectedMusic) {
-            localStorage.setItem('selectedMusic', this.selectedMusic);
-        }
-    }
 }
 
 // Inicializar aplicação
