@@ -3,7 +3,7 @@
 class NossoAmor {
     constructor() {
         this.startDate = new Date('2025-06-20T00:00:00'); // Data de início do relacionamento
-        this.targetDate = new Date('2025-10-03T00:00:00'); // Data alvo para contagem regressiva
+        this.targetDate = new Date('2025-10-04T10:00:00'); // Data alvo para contagem regressiva
         this.selectedMusic = null;
         this.audioPlayers = {
             iris: new Audio('msc/iris.mp3'),
