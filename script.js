@@ -44,6 +44,7 @@ class NossoAmor {
             { src: 'img/3.jpeg', caption: 'Amo' },
             { src: 'img/4.jpeg', caption: 'Muito' },
             { src: 'img/5.jpeg', caption: 'Meu Amor' },
+            { src: 'img/6.jpeg', caption: '03/10/2025 ❤️},
 
         ];
         
