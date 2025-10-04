@@ -60,7 +60,6 @@ class NossoAmor {
     }
     
     init() {
-        this.loadFromLocalStorage();
         this.setupIntro();
         this.setupNavigation();
         this.setupTimeCounter();
